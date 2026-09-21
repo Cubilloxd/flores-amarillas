@@ -1,0 +1,695 @@
+Aquí tienes el código completo en un solo bloque listo para copiar y guardar como un archivo **`index.html`**:
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Flaquita 🌙🌻✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1e1b4b 0%, #0f172a 50%, #030712 100%);
+            overflow-x: hidden;
+            user-select: none;
+            color: #fef08a;
+        }
+
+        .font-cursive {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Glow Effects */
+        .glow-yellow {
+            filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.75)) drop-shadow(0 0 25px rgba(234, 179, 8, 0.4));
+        }
+
+        .glow-text-gold {
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.7), 0 0 20px rgba(234, 179, 8, 0.4);
+        }
+
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        /* Contenedor del Sobre */
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background-color: #0d1322;
+            border: 2px solid #eab308;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(234, 179, 8, 0.25), inset 0 0 15px rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: visible;
+        }
+
+        .envelope:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 40px rgba(250, 204, 21, 0.45), inset 0 0 15px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Solapa Superior (Flap) */
+        .envelope-flap {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 320px;
+            height: 125px;
+            background-color: #1e293b;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            border-top: 2px solid #eab308;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.7));
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 18px;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        /* Bolsillo Frontal Inferior */
+        .envelope-pocket {
+            position: absolute;
+            bottom: -2px;
+            left: -2px;
+            width: 320px;
+            height: 140px;
+            background-color: #0f172a;
+            clip-path: polygon(0 100%, 100% 100%, 100% 0, 50% 50%, 0 0);
+            border-bottom: 2px solid #eab308;
+            border-radius: 0 0 12px 12px;
+            z-index: 3;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Sello de Cera Dorado */
+        .wax-seal {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 52px;
+            height: 52px;
+            background: radial-gradient(circle, #facc15, #ca8a04);
+            border: 2px solid #fef08a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #422006;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.8);
+            z-index: 6;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .envelope.open .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            pointer-events: none;
+        }
+
+        /* Papel de la Carta (Oculta completamente hasta abrir) */
+        .letter-paper {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
+            width: 290px;
+            height: 180px;
+            background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+            border: 1px solid #ca8a04;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s, z-index 0s 0.4s;
+            z-index: 2; /* Detrás del bolsillo (z-index 3) y la solapa (z-index 5) */
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .envelope.open .letter-paper {
+            transform: translateX(-50%) translateY(-130px);
+            z-index: 4;
+            opacity: 1;
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(250, 204, 21, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(250, 204, 21, 0.9); }
+        }
+
+        .animate-subtle-pulse {
+            animation: subtle-pulse 2s infinite ease-in-out;
+        }
+
+        canvas {
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Animación florecimiento */
+        .flower-bloom {
+            transform-origin: bottom center;
+            animation: bloom 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Tooltip flotante para mensajes de flores */
+        .flower-tooltip {
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            z-index: 50;
+        }
+
+        .flower-tooltip.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden">
+
+    <!-- Reproductor de Audio: Best Part - Daniel Caesar feat. H.E.R. -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Canvas para Noche Estrellada y Partículas Doradas -->
+    <canvas id="bgCanvas" class="fixed inset-0 w-full h-full z-0"></canvas>
+
+    <!-- PANTALLA 1: SOBRE DE CARTA NOCTURNO -->
+    <div id="screen1" class="relative z-10 flex flex-col items-center justify-center p-4 transition-all duration-700">
+        
+        <div id="envelopeWrapper" class="envelope-wrapper my-8">
+            <div id="envelope" class="envelope" onclick="openEnvelope()">
+                <!-- Solapa Superior con el texto "Para mi flaquita" -->
+                <div class="envelope-flap">
+                    <span class="font-cursive text-2xl font-bold text-yellow-300 glow-text-gold tracking-wide select-none">
+                        Para mi flaquita 💙
+                    </span>
+                </div>
+
+                <!-- Bolsillo frontal -->
+                <div class="envelope-pocket"></div>
+
+                <!-- Sello de cera -->
+                <div class="wax-seal">
+                    <i class="fa-solid fa-star text-xl"></i>
+                </div>
+
+                <!-- Carta dentro del sobre -->
+                <div class="letter-paper flex flex-col justify-between text-yellow-100">
+                    <div class="text-center mt-2">
+                        <span class="text-[10px] font-semibold uppercase tracking-widest text-amber-300">Un Detalle Especial</span>
+                        <p class="font-cursive text-2xl mt-1 font-bold text-yellow-300 glow-text-gold">Una sorpresa para ese corazón roto</p>
+                    </div>
+                    <div class="text-center text-xs text-amber-200/80 mb-1">
+                        <i class="fa-solid fa-sparkles mr-1 text-yellow-400"></i> Abriendo tu mensaje
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: MENSAJE NOCTURNO DESPLEGADO -->
+    <div id="screen2" class="fixed inset-0 z-20 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-700">
+        <div class="bg-slate-900/95 border-2 border-amber-400/60 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(250,204,21,0.25)] relative transform scale-90 transition-all duration-500 text-yellow-100" id="letterModal">
+            
+            <!-- Adornos de estrellas -->
+            <div class="absolute top-3 left-3 text-yellow-400 text-lg"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute top-3 right-3 text-yellow-400 text-lg"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute bottom-3 left-3 text-yellow-400 text-lg"><i class="fa-solid fa-moon"></i></div>
+            <div class="absolute bottom-3 right-3 text-yellow-400 text-lg"><i class="fa-solid fa-sparkles"></i></div>
+
+            <div class="text-center mb-6">
+                <span class="text-amber-400 text-xs font-semibold tracking-widest uppercase">Para Ti 💙</span>
+                <h2 class="font-cursive text-4xl sm:text-5xl font-bold text-yellow-300 mt-1 glow-text-gold">Flores Amarillas 💙</h2>
+            </div>
+
+            <div class="space-y-4 text-base sm:text-lg leading-relaxed text-yellow-100/90 font-light text-justify">
+                <p>
+                    Sé que estás pasando por un momento difícil y espero que este detalle de estas <strong class="text-yellow-300 font-semibold">flores amarillas</strong> te haga sentir mejor y que sepas que aunque no he sido el muchacho que esperabas, trato de serlo. Eres muy importante en mi vida flaquita.
+                </p>
+                <p>
+                    No seas tan dura contigo flaca, te mereces ser feliz y quiero verte serlo, mi limoncito 💙.
+                </p>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="showGiftScreen()" class="animate-subtle-pulse bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-bold text-lg px-8 py-4 rounded-full shadow-lg transition-all duration-300 border-2 border-yellow-200 flex items-center justify-center gap-3 mx-auto">
+                    <span>Abre tu regalo</span> 💙
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: EL JARDÍN DE FLORES NOCTURNAS Y RESPLANDECIENTES -->
+    <div id="screen3" class="fixed inset-0 z-10 flex flex-col items-center justify-between p-4 opacity-0 pointer-events-none transition-all duration-1000">
+        
+        <!-- Encabezado flotante -->
+        <div class="text-center mt-4 z-20 bg-slate-900/80 backdrop-blur-md px-8 py-3 rounded-full border border-yellow-500/50 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
+            <h1 class="font-cursive text-3xl sm:text-4xl font-bold text-yellow-300 glow-text-gold">¡Para Ti, Mi Limoncito! 💙 </h1>
+            <p class="text-xs sm:text-sm text-yellow-200/80 mt-1 font-medium">Pasa el cursor sobre cada flor para ver unos detallitos </p>
+            <!-- Frase célebre de la canción "Best Part" -->
+            <p class="text-[11px] sm:text-xs text-amber-300/90 italic mt-1.5 font-light">"You're the coffee that I need in the morning / You're my sunshine in the rain when it's pouring." ✨</p>
+        </div>
+
+        <!-- Contenedor del Ramo / Jardín de Flores Interactive SVG -->
+        <div class="relative w-full max-w-3xl h-[60vh] flex items-end justify-center my-auto" id="flowerGarden">
+            <!-- Las flores se generarán dinámicamente -->
+        </div>
+
+        <!-- Botones de Control -->
+        <div class="z-20 mb-4 flex gap-4 items-center">
+            <button onclick="regenerateGarden()" class="bg-slate-900/80 hover:bg-slate-800 text-yellow-300 border border-yellow-500/50 font-medium px-5 py-2.5 rounded-full shadow-lg backdrop-blur-md transition-all text-sm flex items-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> Florecer de nuevo
+            </button>
+            <button id="musicBtn" onclick="toggleAudio()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold px-5 py-2.5 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.5)] transition-all text-sm flex items-center gap-2">
+                <i class="fa-solid fa-music"></i> <span id="musicBtnText">Pausar Música</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tooltip Flotante para Mensajes de Flores -->
+    <div id="flowerTooltip" class="flower-tooltip bg-slate-900/95 text-yellow-200 px-4 py-2 rounded-xl text-sm font-medium shadow-[0_0_20px_rgba(250,204,21,0.4)] border border-yellow-400/80 backdrop-blur-md">
+        <span id="tooltipText">¡Toma agua 💙 !</span>
+    </div>
+
+    <script>
+        let audioContext = null;
+        let isAudioPlaying = false;
+        let isEnvelopeOpened = false;
+
+        const bgMusic = document.getElementById('bgMusic');
+
+        // Frases cariñosas para mi flaquita
+        const flowerMessages = [
+            "¡Eres la lucecita de mi noche! ",
+            "Tu carita ilumina mi corazoncito ",
+            "Con todo mi amor para ti, mi flaquita ",
+            "Que nunca te falten motivos para brillar ",
+            "Un detalle pensando solo en ti ",
+            "¡Gracias por existir, mi flaquita! ",
+            "Eres mi alegría ",
+            "Un abrazo fuerte lleno de cariño ",
+            "Siempre recuerda lo especial e increíble que eres "
+        ];
+
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        // Inicializar Cielo Estrellado Titilante
+        function initStars() {
+            stars = [];
+            const starCount = Math.floor((canvas.width * canvas.height) / 3000);
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.02 + 0.005,
+                    increasing: Math.random() > 0.5
+                });
+            }
+        }
+
+        // Partículas flotantes de luz dorada
+        class GoldParticle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 10;
+                this.size = Math.random() * 4 + 1.5;
+                this.speedY = Math.random() * 1.2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.opacity = Math.random() * 0.7 + 0.3;
+                this.color = Math.random() > 0.4 ? '#facc15' : '#fef08a';
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += Math.sin(this.y * 0.01) * 0.5;
+
+                if (this.y < -10) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#facc15';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 40; i++) {
+            particles.push(new GoldParticle());
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function animateScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar Estrellas
+            stars.forEach(star => {
+                if (star.increasing) {
+                    star.alpha += star.speed;
+                    if (star.alpha >= 1) star.increasing = false;
+                } else {
+                    star.alpha -= star.speed;
+                    if (star.alpha <= 0.2) star.increasing = true;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = star.alpha;
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // Dibujar Partículas Doradas Ascendentes
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateScene);
+        }
+        animateScene();
+
+        // Apertura del sobre
+        function openEnvelope() {
+            if (isEnvelopeOpened) return;
+            isEnvelopeOpened = true;
+
+            playChimeSound();
+
+            const envelope = document.getElementById('envelope');
+            envelope.classList.add('open');
+
+            setTimeout(() => {
+                const screen2 = document.getElementById('screen2');
+                const letterModal = document.getElementById('letterModal');
+                
+                screen2.classList.remove('opacity-0', 'pointer-events-none');
+                letterModal.classList.remove('scale-90');
+                letterModal.classList.add('scale-100');
+            }, 1200);
+        }
+
+        // Transición a la pantalla de flores y reproducción de música
+        function showGiftScreen() {
+            playSparkleSound();
+            startMusic();
+
+            const screen1 = document.getElementById('screen1');
+            const screen2 = document.getElementById('screen2');
+            const screen3 = document.getElementById('screen3');
+
+            screen1.classList.add('opacity-0', 'pointer-events-none');
+            screen2.classList.add('opacity-0', 'pointer-events-none');
+
+            setTimeout(() => {
+                screen1.style.display = 'none';
+                screen2.style.display = 'none';
+
+                screen3.classList.remove('opacity-0', 'pointer-events-none');
+                generateGarden();
+            }, 600);
+        }
+
+        // Reproducir canción "Best Part"
+        function startMusic() {
+            bgMusic.play().then(() => {
+                isAudioPlaying = true;
+                document.getElementById('musicBtnText').innerText = "Pausar Música";
+            }).catch(err => {
+                console.log("Autoplay bloqueado por el navegador:", err);
+            });
+        }
+
+        // Alternar reproducción/pausa de música
+        function toggleAudio() {
+            const btnText = document.getElementById('musicBtnText');
+
+            if (isAudioPlaying) {
+                bgMusic.pause();
+                isAudioPlaying = false;
+                btnText.innerText = "Música Nocturna";
+            } else {
+                bgMusic.play();
+                isAudioPlaying = true;
+                btnText.innerText = "Pausar Música";
+            }
+        }
+
+        // Generar Jardín Nocturno de Flores Resplandecientes
+        function generateGarden() {
+            const garden = document.getElementById('flowerGarden');
+            garden.innerHTML = '';
+
+            const count = window.innerWidth < 640 ? 5 : 7;
+            const types = ['sunflower', 'daisy', 'tulip'];
+
+            for (let i = 0; i < count; i++) {
+                const type = types[i % types.length];
+                const height = 280 + Math.random() * 120;
+                const flowerMsg = flowerMessages[i % flowerMessages.length];
+                
+                const flowerDiv = document.createElement('div');
+                flowerDiv.className = 'flower-bloom relative flex flex-col items-center group cursor-pointer mx-[-12px] sm:mx-[-8px]';
+                flowerDiv.style.animationDelay = `${i * 0.2}s`;
+                flowerDiv.style.zIndex = Math.floor(Math.random() * 10) + 10;
+
+                flowerDiv.innerHTML = getFlowerSVG(type, height);
+
+                flowerDiv.addEventListener('mouseenter', (e) => triggerFlowerEffect(e, flowerDiv, flowerMsg));
+                flowerDiv.addEventListener('click', (e) => triggerFlowerEffect(e, flowerDiv, flowerMsg));
+
+                garden.appendChild(flowerDiv);
+            }
+        }
+
+        function regenerateGarden() {
+            playSparkleSound();
+            generateGarden();
+        }
+
+        // Generador SVG de Flores Amarillas
+        function getFlowerSVG(type, stemHeight) {
+            if (type === 'sunflower') {
+                return `
+                <div class="transition-transform duration-300 transform group-hover:scale-110 group-hover:rotate-6 flex flex-col items-center glow-yellow">
+                    <svg width="120" height="120" viewBox="0 0 100 100">
+                        <g fill="#facc15" stroke="#eab308" stroke-width="0.5">
+                            ${Array.from({length: 12}).map((_, index) => `
+                                <path d="M50 50 Q42 10 50 0 Q58 10 50 50" transform="rotate(${index * 30} 50 50)"/>
+                            `).join('')}
+                        </g>
+                        <circle cx="50" cy="50" r="22" fill="#713f12" />
+                        <circle cx="50" cy="50" r="18" fill="#451a03" stroke="#facc15" stroke-width="1.5" stroke-dasharray="2 2" />
+                    </svg>
+                    <svg width="60" height="${stemHeight}" viewBox="0 0 60 ${stemHeight}">
+                        <path d="M30 0 Q35 ${stemHeight/2} 30 ${stemHeight}" fill="none" stroke="#15803d" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M30 ${stemHeight*0.4} Q50 ${stemHeight*0.3} 45 ${stemHeight*0.25} Q30 ${stemHeight*0.35} 30 ${stemHeight*0.4}" fill="#166534"/>
+                        <path d="M30 ${stemHeight*0.6} Q10 ${stemHeight*0.5} 15 ${stemHeight*0.45} Q30 ${stemHeight*0.55} 30 ${stemHeight*0.6}" fill="#166534"/>
+                    </svg>
+                </div>`;
+            } else if (type === 'daisy') {
+                return `
+                <div class="transition-transform duration-300 transform group-hover:scale-110 group-hover:-rotate-6 flex flex-col items-center glow-yellow">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <g fill="#fef08a" stroke="#facc15" stroke-width="0.5">
+                            ${Array.from({length: 10}).map((_, index) => `
+                                <ellipse cx="50" cy="20" rx="8" ry="20" transform="rotate(${index * 36} 50 50)"/>
+                            `).join('')}
+                        </g>
+                        <circle cx="50" cy="50" r="14" fill="#eab308" />
+                    </svg>
+                    <svg width="60" height="${stemHeight}" viewBox="0 0 60 ${stemHeight}">
+                        <path d="M30 0 Q25 ${stemHeight/2} 30 ${stemHeight}" fill="none" stroke="#15803d" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M30 ${stemHeight*0.5} Q50 ${stemHeight*0.45} 40 ${stemHeight*0.38}" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>`;
+            } else {
+                return `
+                <div class="transition-transform duration-300 transform group-hover:scale-110 group-hover:rotate-3 flex flex-col items-center glow-yellow">
+                    <svg width="90" height="90" viewBox="0 0 100 100">
+                        <path d="M30 70 C10 50 20 10 35 30 C45 10 55 10 65 30 C80 10 90 50 70 70 C55 85 45 85 30 70 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+                        <path d="M40 70 C30 50 40 25 50 40 C60 25 70 50 60 70 Z" fill="#eab308"/>
+                    </svg>
+                    <svg width="60" height="${stemHeight}" viewBox="0 0 60 ${stemHeight}">
+                        <path d="M30 0 Q32 ${stemHeight/2} 30 ${stemHeight}" fill="none" stroke="#15803d" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M30 ${stemHeight*0.7} Q55 ${stemHeight*0.4} 35 ${stemHeight*0.2}" fill="#166534"/>
+                    </svg>
+                </div>`;
+            }
+        }
+
+        function triggerFlowerEffect(e, element, message) {
+            playPopNote();
+
+            const tooltip = document.getElementById('flowerTooltip');
+            const tooltipText = document.getElementById('tooltipText');
+            
+            tooltipText.innerText = message;
+            
+            const rect = element.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + rect.width / 2 - 100}px`;
+            tooltip.style.top = `${rect.top - 45}px`;
+            
+            tooltip.classList.add('active');
+
+            setTimeout(() => {
+                tooltip.classList.remove('active');
+            }, 2500);
+
+            createStarBurst(rect.left + rect.width / 2, rect.top + 40);
+        }
+
+        // Ráfaga de estrellas
+        function createStarBurst(x, y) {
+            for (let i = 0; i < 12; i++) {
+                const star = document.createElement('div');
+                star.className = 'fixed pointer-events-none z-50 text-yellow-300 text-lg transition-all duration-1000 ease-out';
+                star.innerHTML = Math.random() > 0.5 ? '✨' : '⭐';
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.filter = 'drop-shadow(0 0 8px #facc15)';
+                document.body.appendChild(star);
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 40 + Math.random() * 60;
+                
+                setTimeout(() => {
+                    star.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist - 50}px) scale(0)`;
+                    star.style.opacity = '0';
+                }, 20);
+
+                setTimeout(() => star.remove(), 1000);
+            }
+        }
+
+        // --- EFECTOS DE SONIDO SINTÉTICOS ---
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playChimeSound() {
+            initAudio();
+            if (!audioContext) return;
+
+            const notes = [261.63, 329.63, 392.00, 523.25];
+            notes.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioContext.currentTime + i * 0.1);
+                gain.gain.setValueAtTime(0.12, audioContext.currentTime + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + i * 0.1 + 0.8);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start(audioContext.currentTime + i * 0.1);
+                osc.stop(audioContext.currentTime + i * 0.1 + 0.8);
+            });
+        }
+
+        function playSparkleSound() {
+            initAudio();
+            if (!audioContext) return;
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'triangle';
+            
+            osc.frequency.setValueAtTime(587.33, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1174.66, audioContext.currentTime + 0.35);
+            
+            gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.35);
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.35);
+        }
+
+        function playPopNote() {
+            initAudio();
+            if (!audioContext) return;
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const freqs = [440, 493.88, 523.25, 587.33, 659.25, 783.99];
+            const randomFreq = freqs[Math.floor(Math.random() * freqs.length)];
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(randomFreq, audioContext.currentTime);
+
+            gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.25);
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.25);
+        }
+    </script>
+</body>
+</html>
+
+```
